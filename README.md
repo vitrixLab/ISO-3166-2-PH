@@ -87,7 +87,7 @@
     </section>
 
     <footer>
-        <p>For further inquiries, please contact <a href="[link]">citrixlabph@gmail.com</a>.</p>
+        <p>For further inquiries, please contact <a href="[link]">vitrixlabph@gmail.com</a>.</p>
     </footer>
 
 </body>
