@@ -3,11 +3,26 @@ from pathlib import Path
 from server.rag import Document, load_markdown_documents, retrieve
 
 
-def test_retrieve_returns_provenance():
+def test_retrieve_defaults_to_current_only():
     documents = [
-        Document("data/SOURCES.md", "Philippine Statistics Authority PSGC current source", "current", "data/SOURCES.md"),
-        Document("legacy.html", "Philippine Statistics Authority PSGC current source", "legacy", "legacy.html"),
+        Document("current.md", "Philippine Statistics Authority PSGC source", "current", "current.md"),
+        Document("history.md", "Philippine Statistics Authority PSGC source", "historical", "history.md"),
     ]
+    matches = retrieve("PSGC source", documents, 5)
+    assert [match.id for match in matches] == ["current.md"]
+
+
+def test_historical_context_is_opt_in():
+    documents = [
+        Document("current.md", "PSGC region", "current", "current.md"),
+        Document("history.md", "PSGC region", "historical", "history.md"),
+    ]
+    matches = retrieve("PSGC region", documents, 5, allowed_statuses=("current", "historical"))
+    assert {match.status for match in matches} == {"current", "historical"}
+
+
+def test_retrieve_returns_provenance():
+    documents = [Document("data/SOURCES.md", "PSGC source", "current", "data/SOURCES.md")]
     matches = retrieve("PSGC source", documents, 1)
     assert matches[0].source == "data/SOURCES.md"
     assert matches[0].status == "current"
