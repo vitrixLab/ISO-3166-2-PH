@@ -14,9 +14,10 @@ def _documents() -> list[Document]:
     return load_markdown_documents(ROOT)
 
 @mcp.tool()
-def search_project_knowledge(query: str, limit: int = 5) -> dict:
-    """Retrieve reviewed project knowledge with provenance metadata."""
-    matches = retrieve(query, _documents(), limit)
+def search_project_knowledge(query: str, limit: int = 5, include_historical: bool = False) -> dict:
+    """Retrieve governed knowledge. Historical context is opt-in and remains labeled."""
+    statuses = ("current", "historical") if include_historical else ("current",)
+    matches = retrieve(query, _documents(), limit, allowed_statuses=statuses)
     return {"query": query, "matches": [{"id": m.id, "score": round(m.score, 4), "status": m.status, "source": m.source, "text": m.text[:4000]} for m in matches]}
 
 @mcp.tool()
