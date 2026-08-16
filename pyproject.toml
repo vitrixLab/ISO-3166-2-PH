@@ -1,0 +1,19 @@
+[project]
+name = "iso-3166-2-ph-rag-mcp"
+version = "0.1.0"
+description = "Provenance-aware RAG and MCP server for ISO 3166-2:PH project knowledge."
+requires-python = ">=3.10"
+dependencies = [
+  "mcp>=2,<3",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8,<9",
+]
+
+[project.scripts]
+iso3166-ph-mcp = "server.mcp_server:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
